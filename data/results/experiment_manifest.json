@@ -1,0 +1,606 @@
+{
+  "phase": "ANVAYA Phase 3F",
+  "created_at_utc": "2026-10-04T15:44:03.680295Z",
+  "dataset": {
+    "train": {
+      "rows": 1814628,
+      "dates": 366,
+      "target_date_min": "2020-06-01",
+      "target_date_max": "2022-09-30",
+      "latitude_unique": 116,
+      "longitude_unique": 117,
+      "regime_counts": {
+        "OTHER": 877912,
+        "BREAK_MONSOON": 563923,
+        "ACTIVE_MONSOON": 200146,
+        "LOW_DEPRESSION": 75741,
+        "COASTAL_RAINFALL": 35942,
+        "WESTERN_DISTURBANCE": 32984,
+        "OROGRAPHIC_RAINFALL": 27980
+      },
+      "path": "data\\processed\\train_verified.parquet",
+      "sha256": "be08bfa10133040ce77fb7f3694794fe6d05a7a124e63b64d3e887ee7ad79328"
+    },
+    "validation": {
+      "rows": 604876,
+      "dates": 122,
+      "target_date_min": "2023-06-01",
+      "target_date_max": "2023-09-30",
+      "latitude_unique": 116,
+      "longitude_unique": 117,
+      "regime_counts": {
+        "OTHER": 311505,
+        "BREAK_MONSOON": 173424,
+        "ACTIVE_MONSOON": 72851,
+        "WESTERN_DISTURBANCE": 14032,
+        "COASTAL_RAINFALL": 12939,
+        "OROGRAPHIC_RAINFALL": 10177,
+        "LOW_DEPRESSION": 9948
+      },
+      "path": "data\\processed\\validation_verified.parquet",
+      "sha256": "34f86655f6125e2365415c9d9f2ca66acd40b586117781d6135c496b926ad377"
+    },
+    "test": {
+      "rows": 604876,
+      "dates": 122,
+      "target_date_min": "2024-06-01",
+      "target_date_max": "2024-09-30",
+      "latitude_unique": 116,
+      "longitude_unique": 117,
+      "regime_counts": {
+        "OTHER": 277823,
+        "BREAK_MONSOON": 170122,
+        "ACTIVE_MONSOON": 86223,
+        "LOW_DEPRESSION": 35324,
+        "COASTAL_RAINFALL": 16548,
+        "WESTERN_DISTURBANCE": 10335,
+        "OROGRAPHIC_RAINFALL": 8501
+      },
+      "path": "data\\processed\\test_verified.parquet",
+      "sha256": "45d3676ded169f95e4582ff73ce764497cfbfa689d55a2c65b25b52779a5569b"
+    },
+    "test_opened_after_models_frozen": true,
+    "legacy_test_parquet_used": false
+  },
+  "feature_version": "feature_registry_v1_phase3e_24_features",
+  "feature_registry": "config\\feature_registry.yaml",
+  "feature_registry_sha256": "15cb4b562692638fedbbc4703cb37f52783a793250c7689a689fa8d41fbd1dc8",
+  "features": [
+    "gfs_daily_rain_mm",
+    "gfs_mslp",
+    "gfs_t2m",
+    "gfs_rh2m",
+    "gfs_u10",
+    "gfs_v10",
+    "gfs_u850",
+    "gfs_v850",
+    "gfs_cape",
+    "gfs_precipitable_water",
+    "rain_last_24h",
+    "latitude",
+    "longitude",
+    "wind_speed_10m",
+    "wind_dir_10m",
+    "wind_speed_850",
+    "moisture_transport_850",
+    "mslp_anomaly",
+    "lead_time_h",
+    "coast_distance_approx",
+    "terrain_elevation_proxy",
+    "orographic_flow_proxy",
+    "month",
+    "day_of_year"
+  ],
+  "feature_categories": {
+    "raw_nwp": [
+      "gfs_daily_rain_mm",
+      "gfs_mslp",
+      "gfs_t2m",
+      "gfs_rh2m",
+      "gfs_u10",
+      "gfs_v10",
+      "gfs_u850",
+      "gfs_v850",
+      "gfs_cape",
+      "gfs_precipitable_water"
+    ],
+    "antecedent_rainfall": [
+      "rain_last_24h"
+    ],
+    "geographic_topographic": [
+      "latitude",
+      "longitude",
+      "coast_distance_approx",
+      "terrain_elevation_proxy",
+      "orographic_flow_proxy"
+    ],
+    "temporal": [
+      "lead_time_h",
+      "month",
+      "day_of_year"
+    ],
+    "derived_wind_thermodynamic": [
+      "wind_speed_10m",
+      "wind_dir_10m",
+      "wind_speed_850",
+      "moisture_transport_850",
+      "mslp_anomaly"
+    ],
+    "regime": [
+      "regime (classifier target only; excluded from predictor matrix)"
+    ]
+  },
+  "regime_labels": [
+    "ACTIVE_MONSOON",
+    "BREAK_MONSOON",
+    "LOW_DEPRESSION",
+    "COASTAL_RAINFALL",
+    "OROGRAPHIC_RAINFALL",
+    "WESTERN_DISTURBANCE",
+    "OTHER"
+  ],
+  "target": "observed_rain_mm",
+  "thresholds_mm": {
+    "heavy": 64.5,
+    "very_heavy": 115.6,
+    "extreme": 204.5
+  },
+  "random_seed": 42,
+  "software": {
+    "python": "3.14.6",
+    "lightgbm": "4.7.0",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scikit_learn": "1.9.1",
+    "pyarrow": "25.0.1"
+  },
+  "model_config": {
+    "regression": {
+      "objective": "regression_l2",
+      "n_estimators": 500,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 100,
+      "max_bin": 127,
+      "feature_fraction": 0.9,
+      "bagging_fraction": 0.8,
+      "bagging_freq": 1,
+      "reg_lambda": 0.1
+    },
+    "classification": {
+      "n_estimators": 400,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 100,
+      "max_bin": 127,
+      "feature_fraction": 0.9,
+      "bagging_fraction": 0.8,
+      "bagging_freq": 1,
+      "reg_lambda": 0.1
+    },
+    "early_stopping_rounds": 40,
+    "seeds": {
+      "random_state": 42,
+      "bagging_seed": 42,
+      "feature_fraction_seed": 42,
+      "data_random_seed": 42,
+      "drop_seed": 42
+    },
+    "threads": 8,
+    "deterministic": true,
+    "force_col_wise": true
+  },
+  "training_audits": {
+    "train": {
+      "rows_audited": 1814628,
+      "target_date_min": "2020-06-01",
+      "target_date_max": "2022-09-30",
+      "split": "train",
+      "antecedent_strictly_before_init": true,
+      "valid_time_equals_init_plus_lead": true
+    },
+    "validation": {
+      "rows_audited": 604876,
+      "target_date_min": "2023-06-01",
+      "target_date_max": "2023-09-30",
+      "split": "validation",
+      "antecedent_strictly_before_init": true,
+      "valid_time_equals_init_plus_lead": true
+    },
+    "test": {
+      "rows_audited": 604876,
+      "target_date_min": "2024-06-01",
+      "target_date_max": "2024-09-30",
+      "split": "test",
+      "antecedent_strictly_before_init": true,
+      "valid_time_equals_init_plus_lead": true
+    }
+  },
+  "regime_classifier_calibration": {
+    "model_path": "models\\scientific\\phase3f\\regime_classifier.joblib",
+    "temperature": 0.8744135071333538,
+    "validation_nll_before": 0.009142778929384938,
+    "validation_nll_after": 0.009061927842873161,
+    "validation_multiclass_brier": 0.006001963988109486,
+    "validation_rows": 604876,
+    "calibration_fit": "single scalar temperature, optimized on validation only"
+  },
+  "regression_fit": {
+    "global": {
+      "best_iteration": 455,
+      "train_rows": 1814628,
+      "validation_rows": 604876
+    },
+    "regime_experts": {
+      "ACTIVE_MONSOON": {
+        "train_rows": 200146,
+        "train_unique_dates": 363,
+        "dedicated_expert": true,
+        "fallback": null,
+        "best_iteration": 111,
+        "validation_rows": 72851
+      },
+      "BREAK_MONSOON": {
+        "train_rows": 563923,
+        "train_unique_dates": 366,
+        "dedicated_expert": true,
+        "fallback": null,
+        "best_iteration": 141,
+        "validation_rows": 173424
+      },
+      "LOW_DEPRESSION": {
+        "train_rows": 75741,
+        "train_unique_dates": 167,
+        "dedicated_expert": true,
+        "fallback": null,
+        "best_iteration": 71,
+        "validation_rows": 9948
+      },
+      "COASTAL_RAINFALL": {
+        "train_rows": 35942,
+        "train_unique_dates": 272,
+        "dedicated_expert": true,
+        "fallback": null,
+        "best_iteration": 81,
+        "validation_rows": 12939
+      },
+      "OROGRAPHIC_RAINFALL": {
+        "train_rows": 27980,
+        "train_unique_dates": 349,
+        "dedicated_expert": true,
+        "fallback": null,
+        "best_iteration": 27,
+        "validation_rows": 10177
+      },
+      "WESTERN_DISTURBANCE": {
+        "train_rows": 32984,
+        "train_unique_dates": 365,
+        "dedicated_expert": true,
+        "fallback": null,
+        "best_iteration": 69,
+        "validation_rows": 14032
+      },
+      "OTHER": {
+        "train_rows": 877912,
+        "train_unique_dates": 366,
+        "dedicated_expert": true,
+        "fallback": null,
+        "best_iteration": 343,
+        "validation_rows": 311505
+      }
+    }
+  },
+  "probability_models": {
+    "heavy": {
+      "threshold_mm": 64.5,
+      "artifact": "models\\scientific\\phase3f\\heavy_probability.joblib",
+      "global_classifier": {
+        "best_iteration": 399,
+        "train_rows": 1814628,
+        "validation_rows": 604876,
+        "early_stopping_used": true
+      },
+      "dedicated_regime_heads": [
+        "ACTIVE_MONSOON",
+        "BREAK_MONSOON",
+        "COASTAL_RAINFALL",
+        "LOW_DEPRESSION",
+        "OROGRAPHIC_RAINFALL",
+        "OTHER",
+        "WESTERN_DISTURBANCE"
+      ],
+      "support": {
+        "ACTIVE_MONSOON": {
+          "train_rows": 200146,
+          "positive_rows": 6904,
+          "negative_rows": 193242,
+          "positive_dates": 295,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 86
+        },
+        "BREAK_MONSOON": {
+          "train_rows": 563923,
+          "positive_rows": 4998,
+          "negative_rows": 558925,
+          "positive_dates": 336,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 96
+        },
+        "LOW_DEPRESSION": {
+          "train_rows": 75741,
+          "positive_rows": 2056,
+          "negative_rows": 73685,
+          "positive_dates": 82,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 81
+        },
+        "COASTAL_RAINFALL": {
+          "train_rows": 35942,
+          "positive_rows": 4003,
+          "negative_rows": 31939,
+          "positive_dates": 159,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 153
+        },
+        "OROGRAPHIC_RAINFALL": {
+          "train_rows": 27980,
+          "positive_rows": 1794,
+          "negative_rows": 26186,
+          "positive_dates": 208,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 56
+        },
+        "WESTERN_DISTURBANCE": {
+          "train_rows": 32984,
+          "positive_rows": 119,
+          "negative_rows": 32865,
+          "positive_dates": 43,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 23
+        },
+        "OTHER": {
+          "train_rows": 877912,
+          "positive_rows": 8393,
+          "negative_rows": 869519,
+          "positive_dates": 355,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 228
+        }
+      },
+      "calibration": "Platt sigmoid on validation-only soft-gated probabilities",
+      "validation_events": 9130
+    },
+    "very_heavy": {
+      "threshold_mm": 115.6,
+      "artifact": "models\\scientific\\phase3f\\very_heavy_probability.joblib",
+      "global_classifier": {
+        "best_iteration": 267,
+        "train_rows": 1814628,
+        "validation_rows": 604876,
+        "early_stopping_used": true
+      },
+      "dedicated_regime_heads": [
+        "ACTIVE_MONSOON",
+        "BREAK_MONSOON",
+        "COASTAL_RAINFALL",
+        "LOW_DEPRESSION",
+        "OROGRAPHIC_RAINFALL",
+        "OTHER"
+      ],
+      "support": {
+        "ACTIVE_MONSOON": {
+          "train_rows": 200146,
+          "positive_rows": 1594,
+          "negative_rows": 198552,
+          "positive_dates": 166,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 61
+        },
+        "BREAK_MONSOON": {
+          "train_rows": 563923,
+          "positive_rows": 747,
+          "negative_rows": 563176,
+          "positive_dates": 182,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 73
+        },
+        "LOW_DEPRESSION": {
+          "train_rows": 75741,
+          "positive_rows": 515,
+          "negative_rows": 75226,
+          "positive_dates": 45,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 26
+        },
+        "COASTAL_RAINFALL": {
+          "train_rows": 35942,
+          "positive_rows": 1080,
+          "negative_rows": 34862,
+          "positive_dates": 103,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 59
+        },
+        "OROGRAPHIC_RAINFALL": {
+          "train_rows": 27980,
+          "positive_rows": 640,
+          "negative_rows": 27340,
+          "positive_dates": 93,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 57
+        },
+        "WESTERN_DISTURBANCE": {
+          "train_rows": 32984,
+          "positive_rows": 11,
+          "negative_rows": 32973,
+          "positive_dates": 5,
+          "dedicated_head": false,
+          "fallback": "global_threshold_classifier"
+        },
+        "OTHER": {
+          "train_rows": 877912,
+          "positive_rows": 1429,
+          "negative_rows": 876483,
+          "positive_dates": 243,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 95
+        }
+      },
+      "calibration": "Platt sigmoid on validation-only soft-gated probabilities",
+      "validation_events": 1990
+    },
+    "extreme": {
+      "threshold_mm": 204.5,
+      "artifact": "models\\scientific\\phase3f\\extreme_probability.joblib",
+      "global_classifier": {
+        "best_iteration": 115,
+        "train_rows": 1814628,
+        "validation_rows": 604876,
+        "early_stopping_used": true
+      },
+      "dedicated_regime_heads": [
+        "ACTIVE_MONSOON",
+        "BREAK_MONSOON",
+        "COASTAL_RAINFALL",
+        "OROGRAPHIC_RAINFALL",
+        "OTHER"
+      ],
+      "support": {
+        "ACTIVE_MONSOON": {
+          "train_rows": 200146,
+          "positive_rows": 166,
+          "negative_rows": 199980,
+          "positive_dates": 52,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 26
+        },
+        "BREAK_MONSOON": {
+          "train_rows": 563923,
+          "positive_rows": 86,
+          "negative_rows": 563837,
+          "positive_dates": 39,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 40
+        },
+        "LOW_DEPRESSION": {
+          "train_rows": 75741,
+          "positive_rows": 104,
+          "negative_rows": 75637,
+          "positive_dates": 17,
+          "dedicated_head": false,
+          "fallback": "global_threshold_classifier"
+        },
+        "COASTAL_RAINFALL": {
+          "train_rows": 35942,
+          "positive_rows": 99,
+          "negative_rows": 35843,
+          "positive_dates": 25,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 36
+        },
+        "OROGRAPHIC_RAINFALL": {
+          "train_rows": 27980,
+          "positive_rows": 208,
+          "negative_rows": 27772,
+          "positive_dates": 34,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 71
+        },
+        "WESTERN_DISTURBANCE": {
+          "train_rows": 32984,
+          "positive_rows": 0,
+          "negative_rows": 32984,
+          "positive_dates": 0,
+          "dedicated_head": false,
+          "fallback": "global_threshold_classifier"
+        },
+        "OTHER": {
+          "train_rows": 877912,
+          "positive_rows": 123,
+          "negative_rows": 877789,
+          "positive_dates": 54,
+          "dedicated_head": true,
+          "fallback": null,
+          "best_iteration": 38
+        }
+      },
+      "calibration": "Platt sigmoid on validation-only soft-gated probabilities",
+      "validation_events": 231
+    }
+  },
+  "artifact_sha256": {
+    "models\\scientific\\phase3f\\anvaya_moe.joblib": "c9bfe4048234dd51a79272a9fe5e60902aa2aebf179bd059bd203ee10b59f996",
+    "models\\scientific\\phase3f\\expert_active_monsoon.joblib": "09ed797dc610f3d04278fe02bbb37ca492052076a209bd72c72f902c1d6d7c66",
+    "models\\scientific\\phase3f\\expert_break_monsoon.joblib": "ccc26af869e1677ede29f1d0c46c9ab9e87075996cba5634c18e485d703bd2af",
+    "models\\scientific\\phase3f\\expert_coastal_rainfall.joblib": "144cc51dd488628ffe8a83ba28339a5965c2bacd09bddaca16eaa5087a468df0",
+    "models\\scientific\\phase3f\\expert_low_depression.joblib": "e00c590a63c63138569db4ecac9e57ac34a6d111d721659bacdfe8f900b07dc8",
+    "models\\scientific\\phase3f\\expert_orographic_rainfall.joblib": "7ec54e4368039f8015351d691b9805bc1b2ac06919fc88ca158d22bc12d95fd3",
+    "models\\scientific\\phase3f\\expert_other.joblib": "3987127659776af38b2727073612a60f2418b79fad0c1f93f057bd10630a53aa",
+    "models\\scientific\\phase3f\\expert_western_disturbance.joblib": "417385ad8bd6c8b3b94036fedd3030c23a036e0a6ea009c211f0aaecc2a331bc",
+    "models\\scientific\\phase3f\\extreme_expert_active_monsoon_classifier.joblib": "e2c75576de0623b6caee9c6d10d0f95c9858e53f38d269b1f9e2f398f9b344da",
+    "models\\scientific\\phase3f\\extreme_expert_break_monsoon_classifier.joblib": "bfd2dcb99799b5de0e08aa9fad13d9774e6d88dd8613878a7658ccc8b2962a83",
+    "models\\scientific\\phase3f\\extreme_expert_coastal_rainfall_classifier.joblib": "d7ea10f0544a2d316c8fb93351c7c45ea707e6d4152b233a0962bd510d66d8a4",
+    "models\\scientific\\phase3f\\extreme_expert_orographic_rainfall_classifier.joblib": "d7d7df14ae8566cae96e5ff12373a6db41c85c884791e499ce2fa09f79725d78",
+    "models\\scientific\\phase3f\\extreme_expert_other_classifier.joblib": "912c7e9452bd55b25723f850d5095131907e52d7964e926d1c4d8bc26dc34a50",
+    "models\\scientific\\phase3f\\extreme_probability.joblib": "29be95db319b0bd92d488ba4e43952ee2d89775f72af116fb0fea869b162d5f9",
+    "models\\scientific\\phase3f\\global_correction.joblib": "97cf575d442ae050f3978d6123c3feb1d80e16eb7276688c8726608cac2879be",
+    "models\\scientific\\phase3f\\global_extreme_classifier.joblib": "fcc0dd0220934bf9b1bf6f5f7920297ac3ec8e16272be9d3db0b453b4668d103",
+    "models\\scientific\\phase3f\\global_heavy_classifier.joblib": "ae145a17bffb2b8415881946608937a8bc348afb00f3165f64ec6ed8aa4c7f30",
+    "models\\scientific\\phase3f\\global_very_heavy_classifier.joblib": "9860e5abe621f14e9bb50ce4b76ca2973453671eee062f64310b3978eba340ea",
+    "models\\scientific\\phase3f\\heavy_expert_active_monsoon_classifier.joblib": "21dee9ec4df1649a10217fbf76bb71e70fea6f9934e376dfd42378ec23418cfa",
+    "models\\scientific\\phase3f\\heavy_expert_break_monsoon_classifier.joblib": "b223dc90f68dcc4be569dff4e304597267cd0cdc5da84cfacd2a39dd236458ff",
+    "models\\scientific\\phase3f\\heavy_expert_coastal_rainfall_classifier.joblib": "027d6abd4a8afc8c0b078a29b50c81d2a642861c22915ea2199779e033e275b1",
+    "models\\scientific\\phase3f\\heavy_expert_low_depression_classifier.joblib": "653baf8c732992da5b645f4b243570e060c595cb0090173b11375ad26b370924",
+    "models\\scientific\\phase3f\\heavy_expert_orographic_rainfall_classifier.joblib": "57da2a32d290ebd47354c5a415982de6ebdb679599f6416fd807db8bad768d93",
+    "models\\scientific\\phase3f\\heavy_expert_other_classifier.joblib": "814f1f8ce40225ea9af3d8bce3033f51d852448d83aa4609af31423223c639f8",
+    "models\\scientific\\phase3f\\heavy_expert_western_disturbance_classifier.joblib": "e52a3116242958334c98b6ff069582a00f86137c83224677fa01a267a88b0397",
+    "models\\scientific\\phase3f\\heavy_probability.joblib": "29321838f433e5b9092dc9793575e607d5781cf41563bbeb4b6f2db98565e8bf",
+    "models\\scientific\\phase3f\\multi_threshold_probabilities.joblib": "4a20f89692cc45f82b1d464ed23f36d5d1186ca9ca67c261bcc38a075c9e195c",
+    "models\\scientific\\phase3f\\regime_classifier.joblib": "d344185f623bd154ce254b90a38dba420232f888e0ce2aacfb385641e7325a9e",
+    "models\\scientific\\phase3f\\very_heavy_expert_active_monsoon_classifier.joblib": "04e4d73364731c047c20f45ea08b92acdb2d4cfd5c010e8fcd6d9294acaf14f0",
+    "models\\scientific\\phase3f\\very_heavy_expert_break_monsoon_classifier.joblib": "2012c8346ddcd68e77861c4c5afd3b68eff49188a17a60efb4ac5779e211c59b",
+    "models\\scientific\\phase3f\\very_heavy_expert_coastal_rainfall_classifier.joblib": "a4fa9be7b143456d4b9535fedf180490b359f83b212a90b9831f3758511f32b9",
+    "models\\scientific\\phase3f\\very_heavy_expert_low_depression_classifier.joblib": "cefbc531b7741d379a84962c68400d836892829bb2fe504538a0c28ec4b8c061",
+    "models\\scientific\\phase3f\\very_heavy_expert_orographic_rainfall_classifier.joblib": "38e132dda61f8400d56383dcf0f3f0145897d75f67b17644ca0520da26edd937",
+    "models\\scientific\\phase3f\\very_heavy_expert_other_classifier.joblib": "a2577676a4901dd7af7d523017769a4778328449aa799039b7ec8a4569cf66a5",
+    "models\\scientific\\phase3f\\very_heavy_probability.joblib": "6053ee71307a3cc9485696f24b9d9b1c9c85f3c3f17604a074b75ad4606fafeb"
+  },
+  "validation_probability_diagnostics_in_sample": {
+    "heavy": {
+      "brier_score": 0.012092158101489002,
+      "log_loss": 0.04991554707200158,
+      "roc_auc": 0.9319892835751297,
+      "probability_csi_at_0p5": 0.1370725854829034
+    },
+    "very_heavy": {
+      "brier_score": 0.003049082385161468,
+      "log_loss": 0.01453176811692879,
+      "roc_auc": 0.9546195354782359,
+      "probability_csi_at_0p5": 0.02114368092263335
+    },
+    "extreme": {
+      "brier_score": 0.00038981997690125647,
+      "log_loss": 0.0025804477384025835,
+      "roc_auc": 0.9426080825430856,
+      "probability_csi_at_0p5": 0.0
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "model_version": "anvaya-scientific-v1",
+  "status": "PROVISIONAL_UNVERIFIED_LOCAL_DATA",
+  "created_at": "2026-10-03T13:39:43.957702+00:00",
+  "dataset_hash": "1f0743ba0974ece88c65f581ece6da381782ae630dc4234920f77ec77db93bc2",
+  "training_period": "2020-2023 partition",
+  "validation_period": "2024 partition",
+  "test_period": "2025 partition preserved",
+  "features": [
+    "gfs_rain_mm",
+    "gfs_mslp",
+    "gfs_t2m",
+    "gfs_rh2m",
+    "gfs_u10",
+    "gfs_v10",
+    "gfs_u850",
+    "gfs_v850",
+    "gfs_cape",
+    "gfs_precipitable_water",
+    "rain_last_6h",
+    "rain_last_24h",
+    "latitude",
+    "longitude",
+    "wind_speed_10m",
+    "wind_dir_10m",
+    "wind_speed_850",
+    "moisture_transport_850",
+    "mslp_anomaly",
+    "lead_time_h",
+    "coast_distance_approx",
+    "terrain_elevation_proxy",
+    "orographic_flow_proxy",
+    "month",
+    "day_of_year"
+  ],
+  "random_seed": 42,
+  "dedicated_regimes": [
+    "ACTIVE_MONSOON",
+    "LOW_DEPRESSION",
+    "COASTAL_RAINFALL",
+    "OROGRAPHIC_RAINFALL",
+    "OTHER"
+  ],
+  "fallback_regimes": [
+    "BREAK_MONSOON",
+    "WESTERN_DISTURBANCE"
+  ],
+  "fallback_strategy": "global_correction_expert",
+  "probability_calibration": {
+    "heavy": {
+      "method": "isotonic",
+      "train_events": 6684,
+      "validation_events": 2158
+    },
+    "very_heavy": {
+      "method": "isotonic",
+      "train_events": 888,
+      "validation_events": 310
+    },
+    "extreme": {
+      "method": "sigmoid",
+      "train_events": 55,
+      "validation_events": 19
+    }
+  },
+  "metrics_path": "data/results/scientific_metrics.json",
+  "prediction_path": "data/results/scientific_test_predictions.parquet",
+  "source_manifest": "data/source_manifest.json"
+}

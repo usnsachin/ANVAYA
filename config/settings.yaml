@@ -1,0 +1,18 @@
+app:
+  name: monsoon-ai
+  version: 0.1.0
+  environment: development
+
+data:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  sample_dir: data/sample
+
+ml:
+  regime:
+    n_regimes: 3
+    labels: [active, moderate, break]
+  correction:
+    method: placeholder
+  probability:
+    threshold_mm: 64.5

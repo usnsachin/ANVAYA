@@ -1,0 +1,278 @@
+version: 1
+project: ANVAYA
+sources:
+  - id: gfs_0p25
+    name: NOAA/NCEP Global Forecast System
+    provider: NOAA/NCEP NOMADS
+    dataset_version: GFS 0.25 degree operational archive
+    temporal_coverage: operational archive; historical availability depends on NOMADS retention
+    spatial_resolution: 0.25 degree
+    temporal_resolution: 1-3 hourly forecast output
+    role: raw NWP baseline and forecast-time predictor fields
+    download_method: NOMADS GRIB2 filter with India bounding-box subsetting
+    license_usage_note: NOAA public data; retain NOMADS attribution and file metadata
+    citation: https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl
+    historical_archive:
+      ucar_dataset: https://gdex.k8s.ucar.edu/datasets/d084001/
+      ucar_provider: NCAR GDEX THREDDS Data Server
+      aws_registry: https://registry.opendata.aws/noaa-gfs-bdp-pds/
+      aws_bucket: s3://noaa-gfs-bdp-pds
+      aws_region: us-east-1
+      aws_key_template: https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.{YYYYMMDD}/{CC}/atmos/gfs.t{CC}z.pgrb2.0p25.f{FFF}
+      aws_index_template: https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.{YYYYMMDD}/{CC}/atmos/gfs.t{CC}z.pgrb2.0p25.f{FFF}.idx
+      ucar_subset_endpoint: https://rda.ucar.edu/
+      ucar_file_template: https://thredds.rda.ucar.edu/thredds/fileServer/files/g/d084001/{YYYY}/{YYYYMMDD}/gfs.0p25.{YYYYMMDD}{CC}.f{FFF}.grib2
+      ucar_ncss_template: https://thredds.rda.ucar.edu/thredds/ncss/grid/files/g/d084001/{YYYY}/{YYYYMMDD}/gfs.0p25.{YYYYMMDD}{CC}.f{FFF}.grib2
+      ucar_access_method: "THREDDS NCSS grid: preflight dataset.xml, request var/time/bbox/vertCoord, then save NetCDF subset"
+      ucar_ncss_output_format: netcdf3
+      ucar_request_policy: "one registered field per NCSS request; test case shows 2m temperature and relative humidity have incompatible vertical-level sets"
+      ucar_subset_capabilities: [variables, geographic_domain, time]
+      dry_run_forecast_hour: 24
+      observed_aws_coverage: "June 2021 and June 2025 sample keys present; gfs.2020 prefix returned no objects on 2026-10-04"
+      coverage_caveat: "Per-date and per-cycle completeness must be rechecked before retrieval; use UCAR GDEX for 2020 and variable/spatial subsets."
+      verified_case:
+        initialization: "2024-07-15T00:00:00Z"
+        valid_time: "2024-07-16T00:00:00Z"
+        lead_hours: 24
+        bbox: {south: 8.0, north: 37.0, west: 68.0, east: 97.0}
+        output: data/raw/gfs/test_subset/gfs_0p25_20240715_00_f024_india.nc
+        manifest: data/raw/manifests/gfs_test_subset.json
+        status: validated_single_case
+      retrieval_timestamp: "2026-10-04T07:10:20.418979+00:00"
+    local_cache_path: data/raw/gfs
+    availability_status: single_historical_subset_verified; full_archive_not_ingested
+    operational_features: true
+    operational_access:
+      access_method: "Open-Meteo Single Runs API, explicit GFS model selector and UTC run; upstream NOAA/NCEP GFS"
+      api_endpoint: https://single-runs-api.open-meteo.com/v1/forecast
+      model_selector: gfs_global
+      forecast_mode: "00Z single run, +27h; hourly preceding-interval precipitation summed over the exact 24-hour target window"
+      intermediary_attribution: "Open-Meteo API is the delivery service; NOAA/NCEP is the upstream model provider"
+      validation_status: implemented; offline_api_smoke_tests_passed
+
+  - id: gefs_0p25
+    name: NOAA/NCEP Global Ensemble Forecast System
+    provider: NOAA/NCEP NOMADS
+    dataset_version: GEFS atmosphere 0.25 degree
+    temporal_coverage: operational archive; historical availability depends on NOMADS retention
+    spatial_resolution: 0.25 degree
+    temporal_resolution: ensemble forecast cycles and lead times
+    role: ensemble mean, spread, percentile, and precipitation uncertainty features
+    download_method: NOMADS GEFS GRIB2 filter with India bounding-box subsetting
+    license_usage_note: NOAA public data; optional source and not mandatory for baseline pipeline
+    citation: https://nomads.ncep.noaa.gov/cgi-bin/filter_gefs_atmos_0p25s.pl
+    retrieval_timestamp: null
+    local_cache_path: data/raw/gefs
+    availability_status: public_endpoint_not_yet_cached
+    operational_features: true
+    operational_access:
+      access_method: "Open-Meteo Ensemble API, explicit GEFS model selector"
+      api_endpoint: https://ensemble-api.open-meteo.com/v1/ensemble
+      model_selector: ncep_gefs025
+      forecast_mode: "derive member 24-hour totals at the GFS target valid time; spread from explicit returned members"
+      intermediary_attribution: "Open-Meteo API is the delivery service; NOAA/NCEP is the upstream model provider"
+      validation_status: implemented; offline_api_smoke_tests_passed
+
+  - id: imd_rainfall_0p25
+    name: IMD RF25 high-resolution daily gridded rainfall over India
+    provider: India Meteorological Department, Climate Research and Services, Pune
+    dataset_version: "Official RF25 long-period catalogue series 1901-2024; local annual NetCDF files 2020-2024. No semantic release ID is present in the files/catalogue."
+    temporal_coverage: "Official catalogue 1901-2024; locally audited complete calendar years 2020-2024"
+    spatial_resolution: 0.25 degree x 0.25 degree
+    grid: "135 longitude x 129 latitude; 66.5-100.0E, 6.5-38.5N; 0.25 degree regular grid"
+    rainfall_variable: RAINFALL
+    rainfall_units: mm
+    missing_value: -999.0
+    temporal_resolution: "Daily; date D represents rainfall ending 08:30 IST / 03:00 UTC on D"
+    accumulation_window_utc: "[D-1 03:00Z, D 03:00Z)"
+    time_coordinate: "TIME has 00:00 date labels; local annual files do not include time bounds"
+    calendar: "GREGORIAN explicitly encoded in 2024; not encoded in 2020-2023 files"
+    local_format: NetCDF classic CDF-1
+    provenance_note: "User-provided as provenance-verified; filenames/schema match the official IMD RF25 catalogue. Source retrieval URL/timestamp and semantic release identifier are not embedded in the files. Legacy imd_* episode NetCDFs remain unverified and are tracked separately."
+    role: primary grid-matched verification target and reference rainfall analysis
+    download_method: IMD Climate Research and Services official RF25 NetCDF archive
+    license_usage_note: preserve IMD product/version metadata; do not call it perfect truth
+    citation: https://imdpune.gov.in/cmpg/Griddata/Rainfall_25_NetCDF.html
+    daily_observation_convention: https://api.imd.gov.in/public/api_reference.html
+    methodology_reference: https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2022EA002595
+    retrieval_timestamp: null
+    local_cache_path: data/raw/imd
+    availability_status: local_RF25_annual_files_2020_2024_present
+    operational_features: false
+
+  - id: mera
+    name: NCMRWF MERA reanalysis
+    provider: NCMRWF
+    dataset_version: version must be recorded per access
+    temporal_coverage: product-dependent
+    spatial_resolution: approximately 4 km
+    temporal_resolution: hourly
+    role: independent high-resolution extreme-event validation and case studies
+    download_method: NCMRWF/MERA data access subject to product availability
+    license_usage_note: keep MERA as a distinct reference; never silently merge with IMD target
+    citation: https://www.ncmrwf.gov.in/
+    retrieval_timestamp: null
+    local_cache_path: data/raw/mera
+    availability_status: not_found_or_access_unverified
+    operational_features: false
+
+  - id: imerg_v07
+    name: NASA GPM IMERG Final
+    provider: NASA GES DISC
+    dataset_version: IMERG V07/V07B, exact version required in manifest
+    temporal_coverage: product-dependent historical archive
+    spatial_resolution: 0.1 degree
+    temporal_resolution: 30 minute and daily derived products
+    role: independent satellite precipitation reference and event cross-check
+    download_method: NASA GES DISC download/API; Earthdata authentication may be required
+    license_usage_note: reference/target only; never use post-event values as live predictors
+    citation: https://disc.gsfc.nasa.gov/datasets/GPM_3IMERGDF_07/summary
+    retrieval_timestamp: null
+    local_cache_path: data/raw/imerg
+    availability_status: authentication_required_unverified
+    operational_features: true
+    operational_role: "Satellite observation/context only, returned after ANVAYA inference; never merged into historical RF25 target or the frozen model input."
+    operational_access:
+      product: "GPM_3IMERGHHE V07B Early Run half-hourly"
+      access_method: "NASA GES DISC OPeNDAP server-side point subset; Earthdata Login token or credentials required"
+      nominal_latency_hours: 4
+      field: "Grid/precipitationCal, mm/hour"
+      aggregation: "48 half-hourly samples; rate multiplied by 0.5 hour and summed"
+      validation_status: implemented; NASA_credentials_and_live_schema_smoke_test_pending
+
+  - id: ecmwf_open_data
+    name: ECMWF IFS and AIFS open forecast data
+    provider: ECMWF Open Data, delivered through Open-Meteo Single Runs API
+    dataset_version: operational IFS 0.25-degree and AIFS Single 0.25-degree products; exact model run recorded per response
+    temporal_coverage: operational runs; provider retention applies
+    spatial_resolution: 0.25 degree global products
+    temporal_resolution: model-dependent; hourly API output and precipitation bounds checked per response
+    role: independent global NWP context in the live operational consensus
+    download_method: "single-run API request with explicit model and UTC initialization; no archive ingestion"
+    license_usage_note: "Preserve ECMWF attribution and Open-Meteo service attribution; this source is live-only and has not been evaluated against the frozen benchmark."
+    citation: https://open-meteo.com/en/docs/ecmwf-api
+    retrieval_timestamp: null
+    local_cache_path: null
+    availability_status: live_api_adapter_implemented;offline_smoke_tests_passed
+    operational_features: true
+    operational_access:
+      api_endpoint: https://single-runs-api.open-meteo.com/v1/forecast
+      model_selectors: {ifs: ecmwf_ifs025, aifs_single: ecmwf_aifs025}
+      run_alignment: "same explicit 00Z run and 24-hour valid window as GFS"
+
+  - id: insat_qpe
+    name: INSAT-3D/3DR quantitative precipitation products
+    provider: ISRO MOSDAC
+    dataset_version: product-dependent QPE/Hydro-Estimator/IMSRA
+    temporal_coverage: product-dependent
+    spatial_resolution: product-dependent high resolution
+    temporal_resolution: product-dependent
+    role: independent high-resolution convective rainfall reference
+    download_method: MOSDAC portal; registration/access may be required
+    license_usage_note: reference only; record product identity and access conditions
+    citation: https://www.mosdac.gov.in/
+    retrieval_timestamp: null
+    local_cache_path: data/raw/insat
+    availability_status: registration_or_access_required
+    operational_features: false
+
+  - id: era5
+    name: ERA5 reanalysis
+    provider: ECMWF/Copernicus Climate Data Store
+    dataset_version: ERA5 hourly reanalysis; exact request metadata required
+    temporal_coverage: 1940-present, subject to product
+    spatial_resolution: 0.25 degree
+    temporal_resolution: hourly
+    role: retrospective atmospheric context, regime labeling, and diagnostics
+    download_method: CDS API with user credentials
+    license_usage_note: retrospective only unless information is proven available at initialization time
+    citation: https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels
+    retrieval_timestamp: null
+    local_cache_path: data/raw/era5
+    availability_status: authentication_required_unverified
+    operational_features: false
+
+  - id: merra2
+    name: MERRA-2 reanalysis
+    provider: NASA GES DISC
+    dataset_version: MERRA-2; exact collection required
+    temporal_coverage: 1980-present, subject to product
+    spatial_resolution: approximately 0.5 degree latitude by 0.625 degree longitude
+    temporal_resolution: hourly and monthly products
+    role: optional retrospective upper-air context and redundancy comparison
+    download_method: NASA GES DISC with Earthdata authentication
+    license_usage_note: optional; do not duplicate ERA5 features without redundancy analysis
+    citation: https://disc.gsfc.nasa.gov/information?project=MERRA-2
+    retrieval_timestamp: null
+    local_cache_path: data/raw/merra2
+    availability_status: authentication_required_unverified
+    operational_features: false
+
+  - id: srtm_dem
+    name: NASA SRTM/NASADEM terrain
+    provider: NASA/USGS LP DAAC
+    dataset_version: SRTMGL1 v003 or verified equivalent
+    temporal_coverage: static mission product
+    spatial_resolution: 1 arc-second or product-specific
+    temporal_resolution: static
+    role: elevation, slope, aspect, relief, and terrain-relative features
+    download_method: public tile service/API; cache India tiles once
+    license_usage_note: preserve product version and public-release terms
+    citation: https://lpdaac.usgs.gov/products/srtmgl1v003/
+    retrieval_timestamp: null
+    local_cache_path: data/raw/dem
+    availability_status: public_endpoint_not_yet_cached
+    operational_features: true
+
+  - id: ibtracs
+    name: International Best Track Archive for Climate Stewardship
+    provider: NOAA NCEI
+    dataset_version: IBTrACS v04r01
+    temporal_coverage: 1980-present
+    spatial_resolution: storm-track points
+    temporal_resolution: six-hourly and source-dependent
+    role: retrospective low/depression/cyclone event context and label validation
+    download_method: NOAA NCEI CSV/NetCDF archive
+    license_usage_note: retrospective labels/evaluation only; do not use future track information operationally
+    citation: https://www.ncei.noaa.gov/products/international-best-track-archive
+    retrieval_timestamp: null
+    local_cache_path: data/raw/ibtracs
+    availability_status: public_endpoint_not_yet_cached
+    operational_features: false
+
+  - id: district_boundaries
+    name: India district boundary reference (NWIC district boundary resource)
+    provider: National Water Informatics Centre (NWIC), Ministry of Jal Shakti; portal metadata credits GSI and feature attributes identify Survey of India
+    dataset_version: NWIC resource 8d9aa2e9-9806-4f26-a4ac-48ba21e9b96d; portal last updated 2025-05-05
+    temporal_coverage: static 2025-vintage administrative boundaries; not asserted current after later administrative changes
+    spatial_resolution: vector polygons
+    temporal_resolution: static release
+    role: district lookup, operational aggregation, and visualization only; not a meteorological target or scientific-evaluation input
+    download_method: NWIC public GeoJSON ZIP; source EPSG:7755 transformed to WGS84 EPSG:4326
+    license_usage_note: no per-resource license text was present in portal metadata at acquisition; retain attribution and confirm portal terms before redistribution
+    citation: https://www.nwdp.nwic.gov.in/dataset/district-boundary
+    retrieval_timestamp: 2026-10-04T18:23:52.733999Z
+    local_cache_path: data/geospatial
+    availability_status: acquired_reference_geometry
+    feature_count: 733
+    source_crs: EPSG:7755
+    analysis_crs: EPSG:4326
+    source_archive_sha256: 44c734cc72139f2447dcebfe2791cac862dc5ba265e158912d797cf3410d5c37
+    operational_geometry: true
+    operational_features: false
+
+  - id: local_existing_raw
+    name: Existing ANVAYA local raw episodes
+    provider: project-local files
+    dataset_version: unknown; provenance requires verification
+    temporal_coverage: July episodes 2020-2025
+    spatial_resolution: nominal 0.25 degree
+    temporal_resolution: daily episode windows
+    role: current prototype regression and pipeline tests only
+    download_method: already present in repository workspace
+    license_usage_note: current files are not independently verified as downloaded NOAA/IMD archives; do not present them as externally validated real data
+    citation: null
+    retrieval_timestamp: null
+    local_cache_path: data/raw/gfs; data/raw/imd
+    availability_status: present_unverified
+    operational_features: false

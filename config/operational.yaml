@@ -1,0 +1,40 @@
+version: 1
+mode: LIVE_OPERATIONAL_MODE
+cache_ttl_seconds: 600
+imerg_total_timeout_seconds: 20
+india_domain:
+  south: 8.0
+  north: 37.0
+  west: 68.0
+  east: 97.0
+warning_policy:
+  label: "ANVAYA OPERATIONAL DECISION RULE"
+  minimum_coverage_fraction: 0.75
+  levels:
+    - name: RED
+      any:
+        - {probability: extreme_probability, threshold: 0.20}
+        - {probability: heavy_probability, threshold: 0.75}
+    - name: ORANGE
+      any:
+        - {probability: very_heavy_probability, threshold: 0.35}
+        - {probability: heavy_probability, threshold: 0.50}
+    - name: YELLOW
+      any:
+        - {probability: heavy_probability, threshold: 0.25}
+  default_level: GREEN
+  disclaimer: "Operational decision rule only; not an official IMD warning and not calibrated as a public warning protocol."
+confidence_policy:
+  method: "independent model-family coverage multiplied by inverse normalized between-family precipitation spread"
+  calibrated_skill_claim: false
+district_risk:
+  aggregation_enabled: true
+  geometry_source: "data/geospatial/india_districts.geojson"
+  display_geometry_source: "data/geospatial/india_districts_map.geojson"
+  grid_spacing_degrees: 0.25
+  max_forecast_samples_per_district: 9
+  minimum_forecast_area_coverage_fraction: 0.75
+  district_request_timeout_seconds: 60
+  district_cache_ttl_seconds: 600
+  aggregation_method: "All intersecting 0.25-degree cells weighted by equal-area intersection (EPSG:6933); at most nine spatially stratified in-district sample points; disclose represented cell count and forecast area coverage."
+  disclaimer: "A sparse area-weighted sample is not an exhaustive gridded district field or an official IMD warning."

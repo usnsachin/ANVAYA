@@ -1,0 +1,28 @@
+version: 1
+features:
+  - {feature_name: gfs_apcp_interval_mm, source_time: forecast_interval, forecast_available: true, target_related: false, allowed_for_live_model: false}
+  - {feature_name: gfs_daily_rain_mm, source_time: derived_from_forecast_intervals, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: gfs_mslp, source_time: init_time_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: gfs_t2m, source_time: init_time_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: gfs_rh2m, source_time: init_time_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: gfs_u10, source_time: init_time_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: gfs_v10, source_time: init_time_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: gfs_u850, source_time: init_time_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: gfs_v850, source_time: init_time_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: gfs_cape, source_time: init_time_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: gfs_precipitable_water, source_time: init_time_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: rain_last_6h, source_time: at_or_before_init_time, forecast_available: false, target_related: false, allowed_for_live_model: false, status: unavailable_from_daily_RF25; requires an independent sub-daily observation source}
+  - {feature_name: rain_last_24h, source_time: at_or_before_init_time, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: latitude, source_time: static, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: longitude, source_time: static, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: wind_speed_10m, source_time: derived_from_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: wind_dir_10m, source_time: derived_from_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: wind_speed_850, source_time: derived_from_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: moisture_transport_850, source_time: derived_from_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: mslp_anomaly, source_time: derived_from_forecast, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: lead_time_h, source_time: forecast_metadata, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: coast_distance_approx, source_time: static, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: terrain_elevation_proxy, source_time: static, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: orographic_flow_proxy, source_time: derived_from_forecast_and_static, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: month, source_time: forecast_metadata, forecast_available: true, target_related: false, allowed_for_live_model: true}
+  - {feature_name: day_of_year, source_time: forecast_metadata, forecast_available: true, target_related: false, allowed_for_live_model: true}

@@ -1,0 +1,37 @@
+# Render Blueprint for ANVAYA's separate FastAPI and Next.js services.
+# Deploys are manual; service URLs are configured in the Render dashboard after
+# the initial services are created. No secrets or guessed public URLs are stored.
+services:
+  - type: web
+    name: anvaya-api
+    runtime: python
+    # The backend imports repository-level ml/ and reads models/, config/, and
+    # data/; a backend-only rootDir would make those required files unavailable.
+    rootDir: .
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeployTrigger: off
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.14.6
+      - key: ENVIRONMENT
+        value: production
+      - key: PYTHONPATH
+        value: backend
+      - key: FRONTEND_URL
+        sync: false
+      - key: ANVAYA_DISTRICT_BOUNDARY_PATH
+        value: data/geospatial/india_districts_map.geojson
+
+  - type: web
+    name: anvaya-frontend
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    autoDeployTrigger: off
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        sync: false

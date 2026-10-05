@@ -1,0 +1,53 @@
+{
+  "dataset": "NWIC India District Boundary GeoJSON",
+  "source_portal": "https://www.nwdp.nwic.gov.in/dataset/district-boundary",
+  "source_download_url": "https://nwdp.nwic.gov.in/dataset/6c1af675-1dec-4927-882c-c1ba9d73f76b/resource/8d9aa2e9-9806-4f26-a4ac-48ba21e9b96d/download/district_nwic_geojson.zip",
+  "portal_boundary_count": 733,
+  "portal_last_update_utc": "2025-05-05T07:23:00Z",
+  "portal_data_producer_agency": "Geological Survey of India (portal metadata); feature attribute src_agency says Survey of India (SOI)",
+  "acquired_at_utc": "2026-10-04T18:23:52.733999Z",
+  "source_archive": "data/geospatial/source/district_nwic_geojson.zip",
+  "source_archive_sha256": "44c734cc72139f2447dcebfe2791cac862dc5ba265e158912d797cf3410d5c37",
+  "source_internal_file": "district_nwic.GeoJSON",
+  "source_crs": "EPSG:7755 \u2014 WGS 84 / India NSF LCC, metres",
+  "output_crs": "EPSG:4326 \u2014 WGS 84 longitude/latitude (RFC 7946 coordinate order)",
+  "full_output": "data/geospatial/india_districts.geojson",
+  "full_output_sha256": "203a04348ae394a03618b4e64ea346d9028fee050bd06b5c66be5811a8766353",
+  "display_output": "data/geospatial/india_districts_map.geojson",
+  "display_output_sha256": "ffc5224352d5f9f79c13576d2aa8f679713cd1ce284da9f963fca9068ea1d99d",
+  "display_generalization": "Topology-preserving Shapely simplify at 500 metres in source CRS; display only, never used for lookup or rainfall aggregation.",
+  "feature_count": 733,
+  "geometry_types": {
+    "MultiPolygon": 725,
+    "Polygon": 8
+  },
+  "source_invalid_geometry_count": 13,
+  "geometry_repairs": {
+    "method": "Shapely make_valid followed by polygon-only union; the original source archive remains unchanged",
+    "source_invalid_features_repaired": [
+      "28-519-srikakulam",
+      "28-521-vizianagaram",
+      "24-449-kachchh",
+      "24-455-patan",
+      "23-667-agar-malwa",
+      "21-353-gajapati",
+      "21-368-nuapada",
+      "33-586-thanjavur",
+      "33-570-cuddalore",
+      "16-654-gomati",
+      "09-123-azamgarh",
+      "09-138-etah",
+      "09-172-muzaffarnagar"
+    ],
+    "repaired_after_transform": [],
+    "collapsed_nonpolygonal_artifacts_dropped": true
+  },
+  "wgs84_bounds_lon_lat": [
+    68.17751186834793,
+    6.755952899354275,
+    97.4128965141613,
+    37.0883417738344
+  ],
+  "license": "No per-resource license text was present in the portal metadata at acquisition; retain attribution and confirm portal terms before redistribution.",
+  "attribution": "National Water Informatics Centre (NWIC), Ministry of Jal Shakti, Government of India; district resource attributed to GSI by portal metadata and Survey of India in feature attributes."
+}

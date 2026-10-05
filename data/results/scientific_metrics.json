@@ -1,0 +1,459 @@
+{
+  "overall": {
+    "raw_gfs": {
+      "rmse": 10.55803239656982,
+      "mae": 5.568053850774334,
+      "bias": -4.993852602439216,
+      "events": {
+        "heavy": {
+          "threshold_mm": 64.5,
+          "hits": 803,
+          "misses": 1378,
+          "false_alarms": 0,
+          "correct_negatives": 36110,
+          "csi": 0.36817973406694177,
+          "pod": 0.36817973406694177,
+          "far": 0.0,
+          "ets": 0.35464602531896255
+        },
+        "very_heavy": {
+          "threshold_mm": 115.6,
+          "hits": 0,
+          "misses": 297,
+          "false_alarms": 0,
+          "correct_negatives": 37994,
+          "csi": 0.0,
+          "pod": 0.0,
+          "far": null,
+          "ets": 0.0
+        },
+        "extreme": {
+          "threshold_mm": 204.5,
+          "hits": 0,
+          "misses": 12,
+          "false_alarms": 0,
+          "correct_negatives": 38279,
+          "csi": 0.0,
+          "pod": 0.0,
+          "far": null,
+          "ets": 0.0
+        }
+      }
+    },
+    "global_ml": {
+      "rmse": 4.47460886813149,
+      "mae": 2.5804200503640358,
+      "bias": -0.24802059015116457,
+      "events": {
+        "heavy": {
+          "threshold_mm": 64.5,
+          "hits": 2109,
+          "misses": 72,
+          "false_alarms": 84,
+          "correct_negatives": 36026,
+          "csi": 0.9311258278145695,
+          "pod": 0.9669876203576341,
+          "far": 0.038303693570451436,
+          "ets": 0.9271058656521668
+        },
+        "very_heavy": {
+          "threshold_mm": 115.6,
+          "hits": 266,
+          "misses": 31,
+          "false_alarms": 89,
+          "correct_negatives": 37905,
+          "csi": 0.689119170984456,
+          "pod": 0.8956228956228957,
+          "far": 0.2507042253521127,
+          "ets": 0.6868855789116253
+        },
+        "extreme": {
+          "threshold_mm": 204.5,
+          "hits": 0,
+          "misses": 12,
+          "false_alarms": 0,
+          "correct_negatives": 38279,
+          "csi": 0.0,
+          "pod": 0.0,
+          "far": null,
+          "ets": 0.0
+        }
+      }
+    },
+    "anvaya_moe": {
+      "rmse": 4.535314415947833,
+      "mae": 2.621302313536618,
+      "bias": -0.2284073444426311,
+      "events": {
+        "heavy": {
+          "threshold_mm": 64.5,
+          "hits": 2093,
+          "misses": 88,
+          "false_alarms": 90,
+          "correct_negatives": 36020,
+          "csi": 0.9216204315279612,
+          "pod": 0.959651535992664,
+          "far": 0.04122766834631241,
+          "ets": 0.9170804675914561
+        },
+        "very_heavy": {
+          "threshold_mm": 115.6,
+          "hits": 234,
+          "misses": 63,
+          "false_alarms": 69,
+          "correct_negatives": 37925,
+          "csi": 0.639344262295082,
+          "pod": 0.7878787878787878,
+          "far": 0.22772277227722773,
+          "ets": 0.6370134256022562
+        },
+        "extreme": {
+          "threshold_mm": 204.5,
+          "hits": 0,
+          "misses": 12,
+          "false_alarms": 0,
+          "correct_negatives": 38279,
+          "csi": 0.0,
+          "pod": 0.0,
+          "far": null,
+          "ets": 0.0
+        }
+      }
+    }
+  },
+  "regime_stratified": {
+    "ACTIVE_MONSOON": {
+      "rows": 25811,
+      "unique_dates": 11,
+      "unique_cycles": 11,
+      "systems": {
+        "raw_gfs": {
+          "rmse": 6.256826391591654,
+          "mae": 3.8264019216613074,
+          "bias": -3.2098857076440277,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 158,
+            "misses": 183,
+            "false_alarms": 0,
+            "correct_negatives": 25470,
+            "csi": 0.4633431085043988,
+            "pod": 0.4633431085043988,
+            "far": 0.0,
+            "ets": 0.4600377723309959
+          }
+        },
+        "global_ml": {
+          "rmse": 3.488656491203127,
+          "mae": 2.4485361461672603,
+          "bias": -0.21033555295480574,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 337,
+            "misses": 4,
+            "false_alarms": 8,
+            "correct_negatives": 25462,
+            "csi": 0.9656160458452722,
+            "pod": 0.9882697947214076,
+            "far": 0.02318840579710145,
+            "ets": 0.9651610491053603
+          }
+        },
+        "anvaya_moe": {
+          "rmse": 3.562190708332097,
+          "mae": 2.47860219569007,
+          "bias": -0.21871898514588564,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 331,
+            "misses": 10,
+            "false_alarms": 7,
+            "correct_negatives": 25463,
+            "csi": 0.9511494252873564,
+            "pod": 0.9706744868035191,
+            "far": 0.020710059171597635,
+            "ets": 0.9505144372880476
+          }
+        }
+      }
+    },
+    "BREAK_MONSOON": {
+      "rows": 4,
+      "unique_dates": 3,
+      "unique_cycles": 3,
+      "systems": {
+        "raw_gfs": {
+          "rmse": 3.425135033834433,
+          "mae": 3.105000000000001,
+          "bias": -2.3800000000000003,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 0,
+            "misses": 0,
+            "false_alarms": 0,
+            "correct_negatives": 4,
+            "csi": null,
+            "pod": null,
+            "far": null,
+            "ets": null
+          }
+        },
+        "global_ml": {
+          "rmse": 2.3162661787753733,
+          "mae": 2.153238317180535,
+          "bias": -0.2418372130999602,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 0,
+            "misses": 0,
+            "false_alarms": 0,
+            "correct_negatives": 4,
+            "csi": null,
+            "pod": null,
+            "far": null,
+            "ets": null
+          }
+        },
+        "anvaya_moe": {
+          "rmse": 2.4537381445962496,
+          "mae": 2.2470864330009825,
+          "bias": 0.4050333187918729,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 0,
+            "misses": 0,
+            "false_alarms": 0,
+            "correct_negatives": 4,
+            "csi": null,
+            "pod": null,
+            "far": null,
+            "ets": null
+          }
+        }
+      }
+    },
+    "LOW_DEPRESSION": {
+      "rows": 1208,
+      "unique_dates": 11,
+      "unique_cycles": 11,
+      "systems": {
+        "raw_gfs": {
+          "rmse": 30.346559243957458,
+          "mae": 26.24720198675497,
+          "bias": -26.24316225165563,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 1,
+            "misses": 533,
+            "false_alarms": 0,
+            "correct_negatives": 674,
+            "csi": 0.0018726591760299626,
+            "pod": 0.0018726591760299626,
+            "far": 0.0,
+            "ets": 0.0010457102606828456
+          }
+        },
+        "global_ml": {
+          "rmse": 14.219973185370376,
+          "mae": 5.028355642278443,
+          "bias": -1.3175547438137771,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 468,
+            "misses": 66,
+            "false_alarms": 70,
+            "correct_negatives": 604,
+            "csi": 0.7748344370860927,
+            "pod": 0.8764044943820225,
+            "far": 0.13011152416356878,
+            "ets": 0.6285933897002306
+          }
+        },
+        "anvaya_moe": {
+          "rmse": 14.410160033611461,
+          "mae": 5.46267214048355,
+          "bias": -0.7215963428876518,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 458,
+            "misses": 76,
+            "false_alarms": 77,
+            "correct_negatives": 597,
+            "csi": 0.7495908346972177,
+            "pod": 0.8576779026217228,
+            "far": 0.14392523364485982,
+            "ets": 0.5914570798279392
+          }
+        }
+      }
+    },
+    "COASTAL_RAINFALL": {
+      "rows": 2666,
+      "unique_dates": 11,
+      "unique_cycles": 11,
+      "systems": {
+        "raw_gfs": {
+          "rmse": 22.451598792393018,
+          "mae": 14.577093023255813,
+          "bias": -14.136027756939239,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 430,
+            "misses": 449,
+            "false_alarms": 0,
+            "correct_negatives": 1787,
+            "csi": 0.4891922639362912,
+            "pod": 0.4891922639362912,
+            "far": 0.0,
+            "ets": 0.3909600070009627
+          }
+        },
+        "global_ml": {
+          "rmse": 5.714649941755318,
+          "mae": 2.9969862583290356,
+          "bias": -0.3414454760091907,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 879,
+            "misses": 0,
+            "false_alarms": 4,
+            "correct_negatives": 1783,
+            "csi": 0.9954699886749717,
+            "pod": 1.0,
+            "far": 0.004530011325028313,
+            "ets": 0.9932417402392135
+          }
+        },
+        "anvaya_moe": {
+          "rmse": 5.695001900709997,
+          "mae": 3.01247293861852,
+          "bias": -0.19798768271420505,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 879,
+            "misses": 0,
+            "false_alarms": 5,
+            "correct_negatives": 1782,
+            "csi": 0.994343891402715,
+            "pod": 1.0,
+            "far": 0.005656108597285068,
+            "ets": 0.9915617316618008
+          }
+        }
+      }
+    },
+    "OROGRAPHIC_RAINFALL": {
+      "rows": 5829,
+      "unique_dates": 11,
+      "unique_cycles": 11,
+      "systems": {
+        "raw_gfs": {
+          "rmse": 10.818899720621564,
+          "mae": 5.625031737862412,
+          "bias": -5.085618459427003,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 194,
+            "misses": 181,
+            "false_alarms": 0,
+            "correct_negatives": 5454,
+            "csi": 0.5173333333333333,
+            "pod": 0.5173333333333333,
+            "far": 0.0,
+            "ets": 0.5007162377994676
+          }
+        },
+        "global_ml": {
+          "rmse": 4.0231648166985075,
+          "mae": 2.537691273922523,
+          "bias": -0.17983078652745535,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 375,
+            "misses": 0,
+            "false_alarms": 1,
+            "correct_negatives": 5453,
+            "csi": 0.9973404255319149,
+            "pod": 1.0,
+            "far": 0.0026595744680851063,
+            "ets": 0.9971575615008309
+          }
+        },
+        "anvaya_moe": {
+          "rmse": 4.007814169576672,
+          "mae": 2.5372887439560587,
+          "bias": -0.2054460282976919,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 375,
+            "misses": 0,
+            "false_alarms": 1,
+            "correct_negatives": 5453,
+            "csi": 0.9973404255319149,
+            "pod": 1.0,
+            "far": 0.0026595744680851063,
+            "ets": 0.9971575615008309
+          }
+        }
+      }
+    },
+    "WESTERN_DISTURBANCE": {
+      "rows": 0
+    },
+    "OTHER": {
+      "rows": 2773,
+      "unique_dates": 11,
+      "unique_cycles": 11,
+      "systems": {
+        "raw_gfs": {
+          "rmse": 6.558605326025864,
+          "mae": 3.993223945185719,
+          "bias": -3.3636025964659217,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 20,
+            "misses": 32,
+            "false_alarms": 0,
+            "correct_negatives": 2721,
+            "csi": 0.38461538461538464,
+            "pod": 0.38461538461538464,
+            "far": 0.0,
+            "ets": 0.38014473720975717
+          }
+        },
+        "global_ml": {
+          "rmse": 3.1104685208687584,
+          "mae": 2.431541042273867,
+          "bias": -0.18639909378769176,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 50,
+            "misses": 2,
+            "false_alarms": 1,
+            "correct_negatives": 2720,
+            "csi": 0.9433962264150944,
+            "pod": 0.9615384615384616,
+            "far": 0.0196078431372549,
+            "ets": 0.9423560633882356
+          }
+        },
+        "anvaya_moe": {
+          "rmse": 3.240882465217832,
+          "mae": 2.512831006260831,
+          "bias": -0.1821642951517851,
+          "heavy": {
+            "threshold_mm": 64.5,
+            "hits": 50,
+            "misses": 2,
+            "false_alarms": 0,
+            "correct_negatives": 2721,
+            "csi": 0.9615384615384616,
+            "pod": 0.9615384615384616,
+            "far": 0.0,
+            "ets": 0.9608322268990649
+          }
+        }
+      }
+    }
+  }
+}

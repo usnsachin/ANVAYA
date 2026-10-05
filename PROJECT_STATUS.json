@@ -1,0 +1,581 @@
+{
+  "FINAL_STATUS": "PHASE_6_KEYLESS_FRONTEND_MAPPING",
+  "phase": "Phase 6 keyless frontend mapping; Phase 3F scientific evaluation frozen",
+  "status": "PHASE_6_KEYLESS_FRONTEND_MAPPING",
+  "completed": [
+    "Corrected the earlier endpoint-only GFS/IMD timing claim after inspecting APCP time bounds; exact daily-window alignment is tested separately",
+    "Verified zero future observation leakage in feature set (observed_rain_mm strictly isolated as target)",
+    "Assembled local July-only dataset across 2020-2023 (Train), 2024 (Validation), 2025 (Test); external raw-file provenance remains unverified",
+    "Total aligned local samples: 194,936 rows across 3,481 spatial grid points over India",
+    "Generated explicit temporal split files: data/processed/train.parquet, validation.parquet, test.parquet",
+    "Verified extreme event representation (11,023 Heavy, 1,495 Very Heavy, 86 Extreme events)",
+    "Created scripts/profile_real_dataset.py producing data_quality_report.json and data_quality_summary.csv",
+    "Verified zero duplicate rows, zero negative rainfall values, zero missing cells",
+    "Created and passed Phase 3B scientific integrity test suite (scripts/test_phase3b.py, 5/5 tests passed)",
+    "Verified Phase 3A regression test suite (scripts/test_phase3a.py, 7/7 tests passed)",
+    "FastAPI backend running and verified over HTTP (all 5 endpoints returning 200)",
+    "Completed Phase 3C-0 scientific readiness gate with data/results/science_readiness_report.json",
+    "Verified leakage audit PASS for target isolation, antecedent source contract, and split separation; prior endpoint-only timestamp check did not validate APCP interval bounds",
+    "Added configurable real-source window selection to scripts/build_real_dataset.py",
+    "Added safe test preservation, source preflight, split integrity validation, and explicit demo-only synthetic opt-in",
+    "Enhanced scripts/profile_real_dataset.py with unique dates, all-regime counts, regime examples, and scientific integrity checks",
+    "Implemented and validated UCARGFSSSubsetProvider on one real 2024-07-15 00Z f024 India subset; all 10 registry fields present",
+    "Added metadata-backed GFS APCP interval differencing and exact 24-hour IMD-window aggregation",
+    "Validated four real bounded GFS precipitation cases (three 00Z dates and one 06Z cycle); all GFS windows tile exactly without overlap or gaps",
+    "Renamed raw GFS precipitation to gfs_apcp_interval_mm and registered gfs_daily_rain_mm as the only aligned primary daily-rain predictor",
+    "Completed 610/610 2020-2024 JJAS GFS/RF25 target dates with zero unresolved failures and 4,958 verified paired cells per date",
+    "Built calendar-separated verified partitions: 1,814,628 train rows, 604,876 validation rows, and 604,876 test rows; all 610 case checksums and exact temporal/spatial alignment checks passed",
+    "Ran scripts/science_readiness_gate.py on only the *_verified.parquet partitions; SCIENCE_READY=YES, all seven regimes meet the 30-distinct-training-date threshold, and leakage audit passes",
+    "Preserved the legacy 2025 test.parquet at the Phase 3E checkpoint; Phase 3F did not read or modify it",
+    "Trained Phase 3F LightGBM regime classifier, global correction, seven supported rainfall experts, and calibrated multi-threshold probability stack using only verified partitions",
+    "Froze model artifact hashes before first access to the 2024 test partition and generated final 2024 JJAS predictions and metrics",
+    "Passed scripts/test_phase3f.py: 35 model artifacts loaded and all 604876 held-out predictions passed integrity checks",
+    "Added a separate LIVE_OPERATIONAL_MODE point API for GFS, GEFS, ECMWF IFS/AIFS, NASA IMERG context, and IMD reference metadata",
+    "Operational path loads frozen Phase 3F bundles only; no training, verified dataset writes, test partition changes, or benchmark edits",
+    "Passed scripts/test_operational_api.py: 12/12 mocked provider, risk-aggregation, order, bounds, and FastAPI route smoke tests, including provider failure fallback",
+    "Acquired and normalized the 733-feature NWIC district reference geometry; preserved source archive, source metadata, and output checksums",
+    "Added EPSG:6933 area-weighted district aggregation with stratified forecast samples, explicit coverage, and configurable non-official warning rules",
+    "Added district catalog, point lookup, selected-district forecast, and map endpoints without writing to frozen scientific inputs",
+    "Replaced legacy/demo verification fallback with read-only Phase 3F 2024 metric serving",
+    "Integrated live operational forecast and district views while keeping SCIENTIFIC_MODE separate from LIVE_OPERATIONAL_MODE",
+    "Phase 4 acceptance tests and frontend build: see phase_4_district_operational_product",
+    "Completed Phase 5 judge-facing entry, map-centered operational dashboard, district filters, nested live probabilities, explicit synthetic Wayanad demo sandbox, and regime-stratified frozen verification display",
+    "Enriched the existing read-only verification response with seven regime-stratified heavy-threshold records from data/results/regime_metrics.csv; no scientific score was recomputed",
+    "Replaced Google Maps and Places frontend dependencies with MapLibre/OpenFreeMap and Open-Meteo geocoding; scientific artifacts, datasets, API contracts, and benchmark values remain unchanged"
+  ],
+  "in_progress": [],
+  "blocked": [
+    "The held-out 2025 target remains unverified; the protected legacy 2025 artifact is unchanged and is not part of the 2020-2024 verified readiness result",
+    "Live third-party provider access and NASA Earthdata credentials still require deployment-environment validation; offline mocks do not prove upstream availability",
+    "NWIC district resource is 2025-vintage and its per-resource redistribution license text was absent; confirm current boundary suitability and portal terms before public deployment",
+    "Legacy non-verified processed datasets still contain deprecated gfs_rain_mm and must not be used in place of the new *_verified.parquet partitions"
+  ],
+  "next_step": "Phase 5 product polish is implemented and offline-tested. Validate current public-provider connectivity, NASA Earthdata authorization, and NWIC redistribution terms before deployment. The six-control browser sandbox is illustrative only; implement a separately reviewed feature-override inference contract before presenting it as an actual model what-if.",
+  "data_mode": "PHASE_3E_VERIFIED_DATASET_READY",
+  "model_mode": "PHASE_3F_MODELS_TRAINED_AND_EVALUATED",
+  "backend_status": "phase5_read_only_regime_metrics_added_to_existing_verification_route; phase4_acceptance_6_of_6_passed; phase3g_api_12_of_12_passed; live_provider_check_pending",
+  "frontend_status": "phase5_judge_facing_polish; npm_run_lint_passed; npm_run_build_passed",
+  "dataset_splits": {
+    "basis": "PHASE_3E_VERIFIED; exclusive readiness input",
+    "total_samples": 3024380,
+    "train_samples": 1814628,
+    "train_target_dates": 366,
+    "train_range": "2020-06-01 to 2022-09-30",
+    "validation_samples": 604876,
+    "validation_target_dates": 122,
+    "validation_range": "2023-06-01 to 2023-09-30",
+    "test_samples": 604876,
+    "test_target_dates": 122,
+    "test_range": "2024-06-01 to 2024-09-30",
+    "paired_cells_per_date": 4958,
+    "files": {
+      "train": "data/processed/train_verified.parquet",
+      "validation": "data/processed/validation_verified.parquet",
+      "test": "data/processed/test_verified.parquet"
+    }
+  },
+  "extreme_event_coverage": {
+    "basis": "Observed RF25 target values in verified Phase 3E splits; counts are cells",
+    "heavy_ge_64p5mm": {"train": 28267, "validation": 9130, "test": 11193},
+    "very_heavy_ge_115p6mm": {"train": 6016, "validation": 1990, "test": 2561},
+    "extreme_ge_204p5mm": {"train": 786, "validation": 231, "test": 338}
+  },
+  "science_readiness": {
+    "SCIENCE_READY": "YES",
+    "report": "data/results/science_readiness_report.json",
+    "current_audit_basis": "Full 610-date 2020-2024 JJAS RF25/GFS build passed the source preflight, checksum, row/grid, temporal alignment, feature, target isolation, and leakage checks. The gate consumed only *_verified.parquet partitions.",
+    "current_regime_and_extreme_metrics": "See date-level regime_coverage and observed_extreme_events below; all values are from verified Phase 3E partitions.",
+    "target_audit_report": "data/results/imd_rf25_target_audit.json",
+    "regime_readiness": {
+      "ACTIVE_MONSOON": {"train_unique_dates": 363, "validation_unique_dates": 122, "test_unique_dates": 122, "train_rows": 200146, "status": "READY"},
+      "BREAK_MONSOON": {"train_unique_dates": 366, "validation_unique_dates": 122, "test_unique_dates": 122, "train_rows": 563923, "status": "READY"},
+      "LOW_DEPRESSION": {"train_unique_dates": 167, "validation_unique_dates": 46, "test_unique_dates": 65, "train_rows": 75741, "status": "READY"},
+      "COASTAL_RAINFALL": {"train_unique_dates": 272, "validation_unique_dates": 99, "test_unique_dates": 98, "train_rows": 35942, "status": "READY"},
+      "OROGRAPHIC_RAINFALL": {"train_unique_dates": 349, "validation_unique_dates": 114, "test_unique_dates": 115, "train_rows": 27980, "status": "READY"},
+      "WESTERN_DISTURBANCE": {"train_unique_dates": 365, "validation_unique_dates": 122, "test_unique_dates": 121, "train_rows": 32984, "status": "READY"},
+      "OTHER": {"train_unique_dates": 366, "validation_unique_dates": 122, "test_unique_dates": 122, "train_rows": 877912, "status": "READY"}
+    },
+    "unique_dates": {"train": 366, "validation": 122, "test": 122},
+    "unique_forecast_cycles": {"train": 366, "validation": 122, "test": 122},
+    "unique_grid_locations": {"train": 4958, "validation": 4958, "test": 4958},
+    "extreme_events": {
+      "heavy_ge_64p5mm": {
+        "train": {"observed_cells": 28267, "observed_unique_dates": 366, "gfs_daily_cells": 15611, "gfs_daily_unique_dates": 335},
+        "validation": {"observed_cells": 9130, "observed_unique_dates": 117, "gfs_daily_cells": 7171, "gfs_daily_unique_dates": 115},
+        "test": {"observed_cells": 11193, "observed_unique_dates": 120, "gfs_daily_cells": 7668, "gfs_daily_unique_dates": 118}
+      },
+      "very_heavy_ge_115p6mm": {
+        "train": {"observed_cells": 6016, "observed_unique_dates": 316, "gfs_daily_cells": 3059, "gfs_daily_unique_dates": 235},
+        "validation": {"observed_cells": 1990, "observed_unique_dates": 92, "gfs_daily_cells": 1689, "gfs_daily_unique_dates": 89},
+        "test": {"observed_cells": 2561, "observed_unique_dates": 107, "gfs_daily_cells": 1783, "gfs_daily_unique_dates": 89}
+      },
+      "extreme_ge_204p5mm": {
+        "train": {"observed_cells": 786, "observed_unique_dates": 131, "gfs_daily_cells": 363, "gfs_daily_unique_dates": 78},
+        "validation": {"observed_cells": 231, "observed_unique_dates": 47, "gfs_daily_cells": 230, "gfs_daily_unique_dates": 39},
+        "test": {"observed_cells": 338, "observed_unique_dates": 55, "gfs_daily_cells": 221, "gfs_daily_unique_dates": 41}
+      }
+    },
+    "leakage_status": "PASS",
+    "data_limitations": [
+      "Grid-cell rows are spatially correlated; temporal support is summarized using unique dates, but event-level independence is not implied",
+      "The held-out 2025 target is not verified and remains outside these splits",
+      "The readiness gate establishes data and regime support, not model skill or operational forecast value"
+    ]
+  },
+  "phase_3b2_expansion": {
+    "status": "BLOCKED_MISSING_REAL_SOURCE_FILES",
+    "old_dataset_rows": 194936,
+    "new_dataset_rows": 194936,
+    "old_date_coverage": "July only: 2020-2025 episode windows",
+    "new_date_coverage": "Unchanged; expansion preflight stopped before writing",
+    "monsoon_coverage": "Existing July windows only; June, August, and September source pairs absent",
+    "non_monsoon_coverage": "None available in data/raw",
+    "existing_test_preserved": true,
+    "requested_train_windows": 24,
+    "requested_validation_windows": 4,
+    "requested_test_windows": 1,
+    "missing_source_policy": "Fail before writing scientific outputs; synthetic generation requires explicit DATA_MODE=demo or --allow-synthetic",
+    "exact_next_action": "Do not run expanded ingestion yet; integrate metadata-aligned gfs_daily_rain_mm into the dataset builder, validate normalized aligned splits against the audited RF25 targets for 2020-2024, and obtain a separately verified 2025 target without modifying the held-out partition"
+  },
+  "gfs_ucar_subset_test": {
+    "status": "VALIDATED_SINGLE_CASE",
+    "provider": "UCARGFSSSubsetProvider",
+    "implementation": "ml/data/ucar_gfs_subset.py",
+    "cli": "scripts/ingest_ucar_gfs_subset.py",
+    "offline_tests": "7/7 passed",
+    "forecast": {
+      "initialization": "2024-07-15T00:00:00Z",
+      "valid_time": "2024-07-16T00:00:00Z",
+      "lead_hours": 24,
+      "cycle_utc": "00"
+    },
+    "bbox": {"south": 8.0, "north": 37.0, "west": 68.0, "east": 97.0},
+    "longitude_convention": "0_to_360_east",
+    "ncss_requests": 10,
+    "output": "data/raw/gfs/test_subset/gfs_0p25_20240715_00_f024_india.nc",
+    "manifest": "data/raw/manifests/gfs_test_subset.json",
+    "file_size_bytes": 616601,
+    "file_size_mib": 0.588,
+    "sha256": "590c3f6e497a42a5000ecda9d134c077261f4aa89d5e0310afffa653491b68bb",
+    "grid_dimensions": {"latitude": 117, "longitude": 117},
+    "raw_gfs_fields_retrieved": 10,
+    "missing_fields": [],
+    "rainfall_range_kg_m2": [0.0, 144.625],
+    "rainfall_valid_interval_utc": ["2024-07-15T18:00:00Z", "2024-07-16T00:00:00Z"],
+    "estimated_stored_decimal_gb_2021_2025": 1.505,
+    "estimated_transfer_decimal_gb_2021_2025": 1.425,
+    "multi_year_ingestion_started": false,
+    "note": "UCAR rejects co-requested 2m TMP and RH due to incompatible vertical-level sets; requests are separate. The f024 APCP interval is 18Z-00Z (6h), stored as gfs_apcp_interval_mm; it is not a daily predictor."
+  },
+  "gfs_precipitation_alignment": {
+    "status": "GFS_ALIGNMENT_VALIDATED_RF25_FULL_DATASET_ALIGNED",
+    "implementation": "ml/data/gfs_precip.py:build_24h_precipitation",
+    "test_script": "scripts/test_gfs_precip_alignment.py",
+    "offline_tests": "7/7 passed",
+    "real_cases": 4,
+    "forecast_cases": [
+      {"initialization": "2024-07-15T00:00:00Z", "target": ["2024-07-15T03:00:00Z", "2024-07-16T03:00:00Z"], "lead_hours": [3, 27], "gfs_daily_region_mean_mm": 10.316, "imd_region_mean_local_value": 29.989, "imd_units_metadata": null},
+      {"initialization": "2024-07-16T00:00:00Z", "target": ["2024-07-16T03:00:00Z", "2024-07-17T03:00:00Z"], "lead_hours": [3, 27], "gfs_daily_region_mean_mm": 10.086, "imd_region_mean_local_value": 30.002, "imd_units_metadata": null},
+      {"initialization": "2024-08-15T00:00:00Z", "target": ["2024-08-15T03:00:00Z", "2024-08-16T03:00:00Z"], "lead_hours": [3, 27], "gfs_daily_region_mean_mm": 6.442, "imd_region_mean_local_value": null, "imd_note": "No local record for Aug 16"},
+      {"initialization": "2024-07-15T06:00:00Z", "target": ["2024-07-16T03:00:00Z", "2024-07-17T03:00:00Z"], "lead_hours": [21, 45], "gfs_daily_region_mean_mm": 9.746, "imd_region_mean_local_value": 30.002, "imd_units_metadata": null}
+    ],
+    "raw_feature": "gfs_apcp_interval_mm",
+    "aligned_feature": "gfs_daily_rain_mm",
+    "target_interval": "[D-1 03:00Z, D 03:00Z)",
+    "aggregation": "metadata-bounded; difference same-start nested accumulations, then sum disjoint intervals",
+    "output_manifest": "data/raw/manifests/gfs_precip_alignment_test.json",
+    "output_directory": "data/raw/gfs/test_subset/",
+    "per_case_file_bytes_range": [568986, 569014],
+    "gfs_apcp_source_units": "kg.m-2; numerically equivalent to mm water equivalent",
+    "legacy_episode_imd_values_caveat": "Older imd_* episode cache files have no units attribute and remain provenance-unverified; the annual RF25 product is audited separately below.",
+    "multi_year_ingestion_started": false,
+    "training_started": false,
+    "verified_rf25_comparison": {
+      "audit_report": "data/results/imd_rf25_target_audit.json",
+      "forecast_initialization": "2024-07-15T00:00:00Z",
+      "target_date": "2024-07-16",
+      "target_window_utc": ["2024-07-15T03:00:00Z", "2024-07-16T03:00:00Z"],
+      "imd_product": "RF25_ind2024_rfp25.nc",
+      "common_valid_cells": 4958,
+      "gfs_mean_mm": 11.875718535699878,
+      "imd_mean_mm": 10.40272045135498,
+      "time_units_grid_latitude_longitude_checks": "PASS"
+    }
+  },
+  "full_scale_mission": {
+    "final_status": "PROVISIONAL_PIPELINE_COMPLETE_SCIENTIFIC_DATA_BLOCKED",
+    "source_registry": "config/data_sources.yaml",
+    "feature_registry": "config/feature_registry.yaml",
+    "source_manifest": "data/source_manifest.json",
+    "source_health_report": "data/results/source_health.json",
+    "source_health_counts": {
+      "AVAILABLE_LOCAL_CACHE": 3,
+      "TEMPORARILY_UNAVAILABLE": 9,
+      "AUTH_REQUIRED": 0,
+      "NOT_FOUND": 0
+    },
+    "local_cache_provenance": "Official RF25 annual 2020-2024 files catalog-matched; older episode caches remain present_unverified",
+    "external_sources_integrated": [],
+    "external_sources_blocked_or_unverified": [
+      "GEFS",
+      "MERA",
+      "IMERG",
+      "INSAT_QPE",
+      "ERA5",
+      "MERRA2",
+      "SRTM_DEM",
+      "IBTrACS",
+      "DISTRICT_BOUNDARIES"
+    ],
+    "data_mode": "PROVISIONAL_UNVERIFIED_LOCAL_DATA",
+    "model_manifest": "models/manifest.json",
+    "model_version": "anvaya-scientific-v1",
+    "model_artifacts": "models/scientific",
+    "readiness": "SCIENCE_READY_NO",
+    "readiness_report": "data/results/science_readiness_report.json",
+    "metrics_report": "data/results/scientific_metrics.json",
+    "predictions_report": "data/results/scientific_test_predictions.parquet",
+    "validation_report": "data/results/validation_report.json",
+    "provisional_training": {
+      "completed": true,
+      "flag": "--allow-insufficient-fallback --provisional",
+      "dedicated_regimes": [
+        "ACTIVE_MONSOON",
+        "LOW_DEPRESSION",
+        "COASTAL_RAINFALL",
+        "OROGRAPHIC_RAINFALL",
+        "OTHER"
+      ],
+      "fallback_regimes": ["BREAK_MONSOON", "WESTERN_DISTURBANCE"],
+      "calibrated_thresholds": ["heavy", "very_heavy", "extreme"]
+    },
+    "verification": {
+      "leakage_firewall": "PASS",
+      "test_split_preserved": true,
+      "test_rows": 38291,
+      "phase_3a_tests": "6/7 passed under base interpreter; FastAPI endpoint test passed separately in bundled backend environment; full bundled suite hung during legacy model loading",
+      "phase_3b_tests": "5/5 passed",
+      "scientific_pipeline_tests": "4/4 passed",
+      "frontend_build": "PASS: npm run build",
+      "interpretation": "reproducibility diagnostics only; not publishable or operational skill"
+    },
+    "documentation": [
+      "DATA_SOURCES.md",
+      "SCIENTIFIC_METHOD.md",
+      "EXPERIMENT_REPORT.md",
+      "ANVAYA_HANDOFF.md"
+    ],
+    "reproduction_command": "python scripts/run_full_pipeline.py --skip-training",
+    "next_scientific_action": "Keep ingestion and training stopped until the dataset builder consumes gfs_daily_rain_mm and audited RF25 IMD values with matching windows, explicit units, and spatial handling; separately resolve the 2025 target gap without modifying the held-out partition"
+  },
+  "phase_3d_scale_ingestion": {
+    "status": "IMD_TARGETS_AVAILABLE_2021_2024_BULK_GFS_STOPPED",
+    "period": "2021-2025 JJAS",
+    "candidate_dates": 610,
+    "candidate_case_slots": 2440,
+    "verified_imd_target_dates": 488,
+    "local_unverified_target_dates": 11,
+    "target_unavailable_dates": 111,
+    "verified_imd_target_case_slots": 1952,
+    "target_unverified_slots": 44,
+    "target_unavailable_slots": 444,
+    "gfs_requests": 0,
+    "successful_gfs_cases": 0,
+    "failed_download_cases": 0,
+    "aligned_samples": 0,
+    "training_started": false,
+    "2025_test_partition_preserved": true,
+    "readiness": "SCIENCE_READY_NO",
+    "report": "data/results/gfs_bulk_ingestion_report.json",
+    "summary": "data/results/gfs_bulk_ingestion_summary.csv",
+    "readiness_report": "data/results/science_readiness_report.json",
+    "next_action": "The RF25 target window is verified for one cached GFS case; explicitly plan and authorize broader GFS requests, build aligned non-test splits, then rerun readiness."
+  },
+  "imd_rf25_target_audit": {
+    "status": "PASS_SINGLE_CASE_TARGET_AND_WINDOW_AUDIT",
+    "product": "IMD RF25 0.25-degree daily gridded rainfall; official catalogue 1901-2024",
+    "local_years": [2020, 2021, 2022, 2023, 2024],
+    "variable": "RAINFALL",
+    "units": "mm",
+    "daily_window_utc": "[D-1 03:00Z, D 03:00Z), ending 08:30 IST on date D",
+    "matched_case": "GFS init 2024-07-15T00:00:00Z, target date 2024-07-16",
+    "common_valid_grid_cells": 4958,
+    "grid_dimensions": [117, 117],
+    "readiness_result": "SCIENCE_READY_YES_AFTER_FULL_PHASE_3E_GATE",
+    "readiness_blocker": "None for the verified 2020-2024 Phase 3E splits; the 2025 target remains outside this build.",
+    "report": "data/results/imd_rf25_target_audit.json"
+  },
+  "phase_3e_verified_dataset": {
+    "status": "VERIFIED_DATASET_COMPLETE_SCIENCE_READY",
+    "period": "2020-2024 JJAS",
+    "candidate_dates": 610,
+    "bounded_sample_expected_cases": 40,
+    "bounded_sample_status": "BOUNDED_SAMPLE_VALIDATED",
+    "bounded_sample_completed_cases": 40,
+    "bounded_sample_failed_cases": 0,
+    "bounded_sample_rows": {"train": 118992, "validation": 39664, "test": 39664},
+    "bounded_sample_regimes_present_each_split": ["ACTIVE_MONSOON", "BREAK_MONSOON", "LOW_DEPRESSION", "COASTAL_RAINFALL", "OROGRAPHIC_RAINFALL", "WESTERN_DISTURBANCE", "OTHER"],
+    "low_depression_unique_dates": {"train": 10, "validation": 2, "test": 4},
+    "paired_valid_cells_per_completed_case": 4958,
+    "full_stage_status": "BUILD_COMPLETE_READINESS_GATE_PASSED",
+    "full_stage_completed_cases_at_checkpoint": 610,
+    "full_stage_failed_cases_at_checkpoint": 0,
+    "full_stage_latest_completed_target_date": "2024-09-30",
+    "full_stage_rows": {"train": 1814628, "validation": 604876, "test": 604876},
+    "split_sha256": {
+      "train": "be08bfa10133040ce77fb7f3694794fe6d05a7a124e63b64d3e887ee7ad79328",
+      "validation": "34f86655f6125e2365415c9d9f2ca66acd40b586117781d6135c496b926ad377",
+      "test": "45d3676ded169f95e4582ff73ce764497cfbfa689d55a2c65b25b52779a5569b"
+    },
+    "grid_dimensions": [117, 117],
+    "target_window_utc": "[D-1 03:00Z, D 03:00Z)",
+    "forecast_selection": "D-1 00Z initialization, valid at D 03Z, lead 27h",
+    "train_years": [2020, 2021, 2022],
+    "validation_year": 2023,
+    "test_year": 2024,
+    "final_verified_splits_created": true,
+    "full_ingestion_started": true,
+    "training_started": false,
+    "legacy_2025_test_partition_preserved": true,
+    "legacy_2025_test_sha256": "c12585ab1882014bc5005767fc88c4a6270d11d80f5d043d9797c99574e8f5e6",
+    "readiness": "SCIENCE_READY_YES",
+    "readiness_blocker": null,
+    "sample_report": "data/results/verified_dataset_sample_report.json",
+    "progress_manifest": "data/raw/manifests/verified_jjas_2020_2024/full_progress.json",
+    "readiness_report": "data/results/science_readiness_report.json",
+    "resume_command": null
+  },
+  "phase_3f_model_training": {
+    "status": "COMPLETE_TEST_EVALUATED",
+    "feature_schema": "ml.features.engineer.FEATURE_SCHEMA",
+    "feature_count": 24,
+    "target": "observed_rain_mm",
+    "splits": {
+      "train": "2020-06-01 to 2022-09-30; 1814628 rows",
+      "validation": "2023-06-01 to 2023-09-30; 604876 rows",
+      "test": "2024-06-01 to 2024-09-30; 604876 rows; 122 dates"
+    },
+    "model_family": "LightGBM",
+    "seed": 42,
+    "models_directory": "models/scientific/phase3f",
+    "model_artifact_count": 35,
+    "test_access": "Model artifacts SHA-256 frozen before test rows were opened; legacy 2025 test.parquet not read or modified",
+    "leakage_audit": "PASS: all train/validation/test rows have valid_time=init_time+lead_hours and antecedent_valid_time<init_time",
+    "headline_test_metrics": {
+      "RAW_GFS": {"rmse_mm": 16.668700, "mae_mm": 7.830288, "mean_bias_mm": 0.494536, "pearson_r": 0.493906, "heavy_csi": 0.149220, "heavy_ets": 0.141800, "heavy_pod": 0.218797, "heavy_far": 0.680621, "heavy_fss_5x5": 0.450218},
+      "GLOBAL_ML": {"rmse_mm": 14.079198, "mae_mm": 7.279531, "mean_bias_mm": 0.714106, "pearson_r": 0.606541, "heavy_csi": 0.196347, "heavy_ets": 0.191033, "heavy_pod": 0.233360, "heavy_far": 0.446845, "heavy_fss_5x5": 0.526886},
+      "ANVAYA": {"rmse_mm": 14.106332, "mae_mm": 7.276667, "mean_bias_mm": 0.636457, "pearson_r": 0.603233, "heavy_csi": 0.188453, "heavy_ets": 0.183192, "heavy_pod": 0.224247, "heavy_far": 0.458585, "heavy_fss_5x5": 0.510119}
+    },
+    "anvaya_vs_global": "ANVAYA has marginally lower MAE/bias; Global ML wins RMSE, Pearson r, and heavy-threshold CSI/ETS/POD/FAR/FSS",
+    "probability_heads": {
+      "thresholds_mm": {"heavy": 64.5, "very_heavy": 115.6, "extreme": 204.5},
+      "calibration": "validation-only Platt sigmoid after soft regime gating; monotonic projection enforced",
+      "test_roc_auc": {"heavy": 0.922766, "very_heavy": 0.947607, "extreme": 0.912438},
+      "test_brier": {"heavy": 0.014746, "very_heavy": 0.003874, "extreme": 0.000543},
+      "extreme_probability_at_0p5": {"observed": 338, "forecast": 6, "hits": 4},
+      "anvaya_regression_extreme_forecasts": 0
+    },
+    "regime_classifier_validation": {"temperature": 0.874414, "nll_before": 0.009143, "nll_after": 0.009062, "multiclass_brier": 0.006002},
+    "validation_confusion_matrix": "data/results/confusion_matrix_regime.csv",
+    "test_predictions": "data/results/test_predictions.parquet",
+    "test_metrics": "data/results/test_metrics.csv",
+    "threshold_metrics": "data/results/threshold_metrics.csv",
+    "regime_metrics": "data/results/regime_metrics.csv",
+    "report": "data/results/model_training_report.json",
+    "manifest": "data/results/experiment_manifest.json",
+    "test_suite": "scripts/test_phase3f.py: PASS; 35 model artifacts loaded"
+  },
+  "phase_3g_operational_integration": {
+    "status": "IMPLEMENTED_OFFLINE_SMOKE_TESTED",
+    "mode": "LIVE_OPERATIONAL_MODE; separate from SCIENTIFIC_MODE",
+    "endpoint": "GET /api/operational/forecast?latitude=...&longitude=...",
+    "implementation": [
+      "ml/operational/gfs_live.py",
+      "ml/operational/ge_f_s.py",
+      "ml/operational/ecmwf.py",
+      "ml/operational/imerg.py",
+      "ml/operational/consensus.py",
+      "ml/operational/risk.py",
+      "backend/app/services/operational_service.py",
+      "backend/app/api/operational.py"
+    ],
+    "source_delivery_layer": "Open-Meteo API for NOAA GFS/GEFS and ECMWF products; upstream model providers are labeled separately",
+    "imerg": "NASA GES DISC OPeNDAP Early Run point subset; Earthdata credentials required; context only, not a model feature",
+    "imd": "Historical RF25 is REFERENCE only, 2020-2024; not current live predictor",
+    "frozen_model_feature_caveat": "rain_last_24h uses a time-matched earlier GFS forecast as a proxy for the IMD RF25 observation used in Phase 3F; operational source shift is unvalidated and disclosed",
+    "window_policy": "24-hour source totals must have identical UTC bounds and valid time before consensus",
+    "failure_policy": "Per-provider UNAVAILABLE status; partial endpoint response and no synthetic provider/model values",
+    "cache_ttl_seconds": 600,
+    "domain": {"south": 8.0, "north": 37.0, "west": 68.0, "east": 97.0},
+    "district_risk": "Phase 3G checkpoint was point-level only; superseded by Phase 4 district aggregation endpoints",
+    "smoke_test": "scripts/test_operational_api.py; 12/12 passed with mocked providers and frozen artifacts",
+    "live_network_smoke_test": "NOT_CONFIRMED; public endpoint probe did not return a usable response in this execution",
+    "protected_integrity_check": {
+      "train_verified_sha256_match": true,
+      "validation_verified_sha256_match": true,
+      "test_verified_sha256_match": true,
+      "legacy_2025_test_sha256_match": true,
+      "phase3f_moe_sha256_match": true,
+      "phase3f_probability_bundle_sha256_match": true
+    },
+    "historical_skill_claim": false,
+    "frontend_modified": false,
+    "verified_splits_modified": false,
+    "phase_3f_results_modified": false
+  },
+  "phase_4_district_operational_product": {
+    "status": "COMPLETE_OFFLINE_ACCEPTANCE_TESTED",
+    "problem_statement": "Regime-Aware AI Post-Processing of Monsoon Rainfall Forecasts",
+    "required_outcomes": [
+      "Weather regime classifier",
+      "Bias-corrected rainfall forecast",
+      "Heavy rainfall probability",
+      "District-level rainfall product",
+      "Verification using RMSE, ETS, CSI, POD, FAR, and FSS"
+    ],
+    "boundary_source": {
+      "dataset": "NWIC India District Boundary GeoJSON",
+      "portal": "https://www.nwdp.nwic.gov.in/dataset/district-boundary",
+      "vintage": "portal last updated 2025-05-05",
+      "feature_count": 733,
+      "source_crs": "EPSG:7755",
+      "analysis_crs": "EPSG:4326",
+      "archive_sha256": "44c734cc72139f2447dcebfe2791cac862dc5ba265e158912d797cf3410d5c37",
+      "metadata": "data/geospatial/district_boundaries_metadata.json",
+      "license_note": "No per-resource license text appeared in portal metadata at acquisition; confirm before redistribution"
+    },
+    "district_aggregation": {
+      "method": "0.25-degree polygon intersections weighted in equal-area EPSG:6933; maximum nine spatially stratified live sample points",
+      "minimum_area_coverage_fraction": 0.75,
+      "national_forecast": false,
+      "warnings_are_official_imd": false
+    },
+    "endpoints": [
+      "GET /api/operational/forecast",
+      "GET /api/operational/districts",
+      "GET /api/operational/districts/lookup",
+      "GET /api/operational/districts/{district_id}",
+      "GET /api/operational/map",
+      "GET /api/verification (frozen SCIENTIFIC_MODE only)"
+    ],
+    "scientific_freeze": {
+      "phase3f_datasets_models_metrics_modified": false,
+      "verification_source": "data/results/test_metrics.csv and data/results/threshold_metrics.csv",
+      "2024_test_samples": 604876,
+      "2024_test_dates": 122,
+      "claim": "Global ML is lower RMSE and stronger on heavy CSI/ETS/POD/FAR/FSS; ANVAYA has marginally lower MAE and bias"
+    },
+    "tests": {
+      "phase4": "scripts/test_phase4.py; 6/6 passed, including dataset/model SHA-256 freeze checks",
+      "phase3g_api": "scripts/test_operational_api.py; 12/12 passed",
+      "frontend_build": "npm run build; passed with supported Webpack bundler and one static-generation worker"
+    },
+    "live_provider_availability": "Not confirmed by offline tests; deployment validation pending"
+  },
+  "phase_5_judge_facing_product_polish": {
+    "status": "IMPLEMENTED_OFFLINE_TESTED",
+    "routes": ["/", "/dashboard", "/forecast", "/districts", "/verification"],
+    "existing_apis_only": [
+      "GET /api/health",
+      "GET /api/operational/forecast",
+      "GET /api/operational/districts",
+      "GET /api/operational/districts/lookup",
+      "GET /api/operational/districts/{district_id}",
+      "GET /api/operational/map",
+      "GET /api/verification"
+    ],
+    "dashboard_data_policy": "KPIs and table metrics use only successfully computed API results; uncomputed districts remain blank/reference-only",
+    "demo_scenario": {
+      "name": "WAYANAD EXTREME OROGRAPHIC RAINFALL",
+      "status": "DEMO_SYNTHETIC_ILLUSTRATIVE",
+      "historical_event_claim": false,
+      "frozen_model_inference": false,
+      "source_provider_calls": false,
+      "terrain_slope_in_phase3f_feature_registry": false
+    },
+    "verification": {
+      "mode": "FROZEN_HELD_OUT_2024",
+      "regime_source": "data/results/regime_metrics.csv",
+      "regimes_served": 7,
+      "regime_threshold": "heavy >= 64.5 mm/day",
+      "regime_fss": "Unavailable in the source CSV; shown as blank, not recomputed",
+      "benchmark_values_recomputed_or_mutated": false
+    },
+    "tests": {
+      "frontend_lint": "npm run lint; passed with no warnings",
+      "frontend_build": "npm run build; passed with Next.js Webpack",
+      "phase4_acceptance": "scripts/test_phase4.py; 6/6 passed, including frozen dataset/model SHA-256 checks and regime payload checks",
+      "operational_api": "scripts/test_operational_api.py; 12/12 passed"
+    },
+    "limitations": [
+      "Live provider availability and NASA Earthdata credentials are deployment checks",
+      "The six-control sandbox is a clearly marked browser-side scenario illustration, not model what-if inference; the production API accepts location queries only",
+      "Regime-stratified FSS is not provided by the frozen regime CSV"
+    ],
+    "scientific_freeze": {
+      "verified_datasets_modified": false,
+      "model_artifacts_modified": false,
+      "frozen_benchmark_values_modified": false,
+      "new_historical_skill_claim": false
+    }
+  },
+  "phase_6_keyless_frontend_mapping": {
+    "status": "IMPLEMENTED_BROWSER_SMOKE_TESTED",
+    "scope": "Frontend mapping/search and requested documentation only",
+    "google_maps_required": false,
+    "requirement_statement": "Google Maps is not required.",
+    "google_places_required": false,
+    "packages": {
+      "added": ["maplibre-gl"],
+      "removed": [],
+      "install_note": "npm install added 23 packages total and reported 8 high audit advisories in the dependency tree; no bulk audit fixes were applied"
+    },
+    "map": {
+      "renderer": "MapLibre GL JS",
+      "tile_style_provider": "OpenFreeMap public styles using OpenStreetMap data",
+      "styles": ["Standard (Bright)", "Light (Positron)", "Dark"],
+      "satellite": "Unavailable; imagery is not fabricated",
+      "attribution": "© OpenStreetMap contributors",
+      "request_policy": "Visible viewport only; no bulk download, geographic prefetch, or application tile cache"
+    },
+    "geocoding": {
+      "provider": "Open-Meteo Geocoding API",
+      "debounce_ms": 350,
+      "local_result_cache_ttl_hours": 24,
+      "india_preferred": true,
+      "fallback": "Existing district directory, manual map selection, browser-native geolocation"
+    },
+    "workflow": {
+      "location_search": "Open-Meteo city results and local Wayanad district results observed in browser; Bengaluru geocoding returned coordinates/admin hierarchy and India was ranked first",
+      "forecast_request": "One selected public Bengaluru result completed the existing point-forecast path; returned ANVAYA 24-hour rainfall 7.1 mm and marker displayed only after response",
+      "home_map_alerts": "A Bengaluru district-directory selection and returned forecast persisted across Home → Map → Alerts client navigation; Alerts only lists queried districts",
+      "point_alerts_scope": "A point forecast does not synthesize a district alert",
+      "locate_me": "navigator.geolocation implementation retained; end-to-end prompt/coordinate test awaits user-granted browser permission"
+    },
+    "preserved": {
+      "scientific_models_and_artifacts_modified": false,
+      "verified_dataset_partitions_modified": false,
+      "phase3f_benchmark_values_modified": false,
+      "phase4_aggregation_modified": false,
+      "backend_operational_api_contracts_modified": false,
+      "verification_metrics_modified": false,
+      "forecast_values_for_unqueried_districts": false
+    },
+    "tests": {
+      "frontend_lint": "npm run lint; passed clean",
+      "frontend_types": "npx tsc --noEmit; passed",
+      "frontend_build": "npm run build; passed with Next.js Webpack and copied MapLibre worker assets",
+      "browser_routes": "/, /map, /alerts, /insights, /forecast loaded; Insights displayed PHASE3F_FROZEN values and 604876 held-out samples",
+      "map": "MapLibre canvas, OpenFreeMap tiles, interactive district boundaries, attribution, and Standard/Light/Dark selector verified in browser",
+      "geocoding": "Open-Meteo Bengaluru results and local district fallback verified in browser",
+      "backend_health": "GET /api/health; HTTP 200",
+      "backend_verification": "GET /api/verification; HTTP 200; unchanged frozen metrics served",
+      "browser_geolocation_permission": "Not granted or prompted during test; requires user-controlled browser permission to validate precise location end-to-end"
+    },
+    "deployment_limitations": [
+      "OpenFreeMap public instance is keyless/free but does not offer an availability SLA",
+      "External geocoding and map availability depend on network access",
+      "Browser location requires HTTPS or localhost and explicit user permission"
+    ]
+  }
+}
